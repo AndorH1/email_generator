@@ -1,0 +1,22 @@
+{
+    "name": "email-signature-generator-frontend",
+    "version": "1.0.0",
+    "description": "Email Signature Generator Frontend",
+    "scripts": {
+        "start": "npx http-server ./frontend -p 3000 -o",
+        "dev": "npx http-server ./frontend -p 3000",
+        "serve": "npx http-server ./frontend -p 3000 -c-1"
+    },
+    "keywords": [
+        "email",
+        "signature",
+        "generator",
+        "html"
+    ],
+    "author": "Student Team",
+    "license": "MIT",
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    },
+    "dependencies": {}
+}
