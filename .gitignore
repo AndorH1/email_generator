@@ -1,55 +1,28 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-.venv/
-
-# Environment variables
-.env
-.env.local
-.env.production
-backend/.env
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
+*.log
 .DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+Homestead.json
+Homestead.yaml
 Thumbs.db
 
-# Node
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Uploads
-uploads/
-*.log
-
-# Distribution
-dist/
-build/
-*.egg-info/
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Docker
-docker-compose.override.yml
+# Old Python backend
+.old-backend/
+database/database.sqlite

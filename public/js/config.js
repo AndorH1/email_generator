@@ -1,5 +1,8 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:8000/api';
+// Auto-detect API URL based on current host, or fallback to localhost:8080
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? `http://${window.location.hostname}:${window.location.port || 8080}/api`
+    : 'http://localhost:8080/api';
 
 // API Endpoints
 const API_ENDPOINTS = {

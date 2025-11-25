@@ -1,22 +1,17 @@
 {
-    "name": "email-signature-generator-frontend",
-    "version": "1.0.0",
-    "description": "Email Signature Generator Frontend",
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
     "scripts": {
-        "start": "npx http-server ./frontend -p 3000 -o",
-        "dev": "npx http-server ./frontend -p 3000",
-        "serve": "npx http-server ./frontend -p 3000 -c-1"
+        "build": "vite build",
+        "dev": "vite"
     },
-    "keywords": [
-        "email",
-        "signature",
-        "generator",
-        "html"
-    ],
-    "author": "Student Team",
-    "license": "MIT",
     "devDependencies": {
-        "http-server": "^14.1.1"
-    },
-    "dependencies": {}
+        "@tailwindcss/vite": "^4.0.0",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^2.0.0",
+        "tailwindcss": "^4.0.0",
+        "vite": "^7.0.7"
+    }
 }
