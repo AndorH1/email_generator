@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Test - Login & Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Quick Functionality Test</h1>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Test Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="testLogin()" class="btn btn-primary">Test Login (john.doe@example.com)</button>
+                        <div id="loginResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3>Test Register</h3>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="testRegister()" class="btn btn-success">Test Register (random user)</button>
+                        <div id="registerResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3>Test Protected Endpoint</h3>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="testProfile()" class="btn btn-info">Test Get Profile (requires login)</button>
+                        <div id="profileResult" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Stored Token</h3>
+                    </div>
+                    <div class="card-body">
+                        <button onclick="showToken()" class="btn btn-secondary">Show Token</button>
+                        <button onclick="clearToken()" class="btn btn-danger">Clear Token</button>
+                        <div id="tokenDisplay" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000/api';
+
+        async function testLogin() {
+            const result = document.getElementById('loginResult');
+            result.innerHTML = '<div class="spinner-border" role="status"></div> Testing...';
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'john.doe@example.com',
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('auth_token', data.access_token);
+                    result.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Login successful!<br>
+                            <small>Token saved to localStorage</small>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="alert alert-danger">❌ ${data.detail}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${error.message}</div>`;
+            }
+        }
+
+        async function testRegister() {
+            const result = document.getElementById('registerResult');
+            result.innerHTML = '<div class="spinner-border" role="status"></div> Testing...';
+
+            const randomNum = Math.floor(Math.random() * 10000);
+            const email = `test${randomNum}@example.com`;
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        password: 'test123',
+                        full_name: `Test User ${randomNum}`
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Registration successful!<br>
+                            <small>Email: ${data.email}</small>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="alert alert-danger">❌ ${data.detail}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${error.message}</div>`;
+            }
+        }
+
+        async function testProfile() {
+            const result = document.getElementById('profileResult');
+            const token = localStorage.getItem('auth_token');
+
+            if (!token) {
+                result.innerHTML = '<div class="alert alert-warning">⚠️ No token found. Login first!</div>';
+                return;
+            }
+
+            result.innerHTML = '<div class="spinner-border" role="status"></div> Testing...';
+
+            try {
+                const response = await fetch(`${API_BASE}/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    result.innerHTML = `
+                        <div class="alert alert-success">
+                            ✅ Profile retrieved!<br>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `<div class="alert alert-danger">❌ ${data.detail}</div>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${error.message}</div>`;
+            }
+        }
+
+        function showToken() {
+            const token = localStorage.getItem('auth_token');
+            const display = document.getElementById('tokenDisplay');
+            if (token) {
+                display.innerHTML = `<div class="alert alert-info"><strong>Token:</strong><br><small>${token}</small></div>`;
+            } else {
+                display.innerHTML = '<div class="alert alert-warning">No token stored</div>';
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('auth_token');
+            document.getElementById('tokenDisplay').innerHTML = '<div class="alert alert-success">Token cleared!</div>';
+        }
+    </script>
+</body>
+
+</html>
