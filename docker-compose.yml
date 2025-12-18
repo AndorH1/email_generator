@@ -1,56 +1,36 @@
-version: '3.8'
+# Email Signature Generator - MySQL Database Only
+#
+# This docker-compose file runs ONLY the MySQL database in Docker.
+# The Laravel application should be run LOCALLY on your machine.
+#
+# Usage:
+#   1. Start MySQL: docker-compose up -d
+#   2. Run Laravel locally: php artisan serve --port=8080
+#
+# DO NOT try to build a Docker image from this project.
+# There is no Dockerfile and it's not needed.
+
+# Email Signature Generator - Docker Compose
+# This file ONLY runs MySQL in Docker
+# Laravel application runs locally with: php artisan serve --port=8080
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0 # Official MySQL image - supports AMD64 (Windows/Intel) and ARM64 (Mac M1/M2)
     container_name: email_signature_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-email_signature_db}
-      MYSQL_USER: ${MYSQL_USER:-root}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-}
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: email_signature_db
     ports:
-      - "3306:3306"
+      - "3306:3306" # MySQL port accessible at localhost:3306
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data:/var/lib/mysql # Persistent storage for database
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword" ]
       timeout: 20s
       retries: 10
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: email-signature-generator:latest
-    container_name: email_signature_app
-    restart: always
-    ports:
-      - "8000:8000"
-    environment:
-      DB_CONNECTION: mysql
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_DATABASE: email_signature_db
-      DB_USERNAME: root
-      DB_PASSWORD: ""
-    depends_on:
-      mysql:
-        condition: service_healthy
-    volumes:
-      - .:/var/www/html
-      - ./storage:/var/www/html/storage
-      - ./bootstrap/cache:/var/www/html/bootstrap/cache
-    command: >
-      sh -c "
-        composer install --no-interaction --optimize-autoloader &&
-        php artisan key:generate --force &&
-        php artisan migrate --force &&
-        php artisan db:seed --class=TemplateSeeder --force &&
-        php artisan serve --host=0.0.0.0 --port=8000
-      "
+      interval: 5s
 
 volumes:
-  mysql_data:
+  mysql_data: # Docker volume for MySQL data persistence

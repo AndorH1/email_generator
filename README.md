@@ -1,6 +1,61 @@
 # Email Signature Generator
 
-A professional email signature generator built with Laravel, PHP, Eloquent ORM, and MySQL.
+A professional email signature generator built with Laravel 12, PHP 8.2+, Eloquent ORM, and MySQL 8.0.
+
+> ✅ **WSL Compatible** - Fully tested and working on Windows WSL 2, macOS, and Linux
+
+> ⚠️ **IMPORTANT - Read First:** 
+> - MySQL runs in Docker (NO Dockerfile needed - uses official MySQL image)
+> - Laravel runs locally with `php artisan serve` (NOT in Docker)
+> - Don't try to build any Docker images - just run `docker-compose up -d`
+> - See [ARCHITECTURE.md](ARCHITECTURE.md) for visual explanation
+
+## 🚀 Quick Start for Students
+
+**📚 Documentation:**
+- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Complete step-by-step setup guide
+- **[WSL_SETUP.md](WSL_SETUP.md)** - Windows WSL specific instructions
+- **[CHECKLIST.md](CHECKLIST.md)** - Printable setup checklist
+- **[DOCKER_SETUP.md](DOCKER_SETUP.md)** - Docker architecture explanation
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Visual system architecture
+
+**Windows WSL Users:** 
+- All commands should be run in **WSL terminal (Ubuntu)**, not PowerShell or CMD
+- See [WSL_SETUP.md](WSL_SETUP.md) for specific instructions
+- Use [CHECKLIST.md](CHECKLIST.md) to track your progress
+
+### Quick Setup Summary
+
+```bash
+# 1. Start MySQL in Docker
+docker-compose up -d
+
+# 2. Install dependencies
+composer install
+
+# 3. Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# 4. Run migrations
+php artisan migrate
+php artisan db:seed --class=TemplateSeeder
+
+# 5. Start server
+php artisan serve --port=8080
+```
+
+Open browser: **http://localhost:8080**
+
+## 📚 Documentation
+
+**Start Here:**
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - ⭐ Visual guide: What runs where? (Read this first!)
+- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Complete setup guide with troubleshooting
+
+**Additional Resources:**
+- **[PROJECT_SETUP.md](PROJECT_SETUP.md)** - Detailed project structure
+- **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)** - Database schema with visual diagrams
 
 ## Tech Stack
 
